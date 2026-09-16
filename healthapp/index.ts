@@ -37,14 +37,12 @@ app.post('/exercises', (req: Request, res: Response) => {
        containsDailyExercises = Array.isArray(daily_exercises);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if ( !target || !daily_exercises || !containsDailyExercises ) { 
      return res.status(400).send({ error: 'parameters missing'});
      }else if ( !isListAllNumbers || isNotNumber(target) ) { 
      return res.status(400).send({ error: 'malformatted parameters' });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const result = calculateExercises(daily_exercises, target);
     return res.send( result );
 });
