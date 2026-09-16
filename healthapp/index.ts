@@ -14,7 +14,7 @@ app.get('/hello', (_req, res: Response) => {
 app.get('/bmi', (req: Request, res: Response) => {
     const { height, weight } = req.query;
 
-    if ( !height || isNotNumber(height) || !weight || isNotNumber(weight)) {    
+    if ( !height || isNaN(Number(height)) || !weight || isNaN(Number(weight))) {    
      return res.status(400).send({ error: 'malformatted parameters'});  
     };
     
