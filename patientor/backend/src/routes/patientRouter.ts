@@ -8,7 +8,7 @@ import type { EntryWithoutId } from '../types.ts';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  const data = patientService.getPatientData();
+  const data = patientService.getStandardPatientData();
   res.send(data);
 });
 
