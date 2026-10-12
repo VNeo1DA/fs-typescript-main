@@ -1,7 +1,5 @@
 import { useState, SyntheticEvent } from "react";
-
 import {  TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
-
 import { PatientFormValues, Gender } from "../../types";
 
 interface Props {
@@ -25,6 +23,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState(Gender.Other);
 
+
   const onGenderChange = (event: SelectChangeEvent<string>) => {
     event.preventDefault();
     if ( typeof event.target.value === "string") {
@@ -34,6 +33,10 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
         setGender(gender);
       }
     }
+  };
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDateOfBirth(event.target.value);
   };
 
   const addPatient = (event: SyntheticEvent) => {
@@ -63,11 +66,13 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
           onChange={({ target }) => setSsn(target.value)}
         />
         <TextField
-          label="Date of birth"
-          placeholder="YYYY-MM-DD"
+          margin="normal" 
+          type="date"
+          slotProps={{ inputLabel: { shrink: true }}}
+          label="Date of Birth"         
           fullWidth
-          value={dateOfBirth}
-          onChange={({ target }) => setDateOfBirth(target.value)}
+          value={dateOfBirth} 
+          onChange={handleDateChange}
         />
         <TextField
           label="Occupation"

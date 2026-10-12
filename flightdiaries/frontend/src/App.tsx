@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import { WeatherOptions, VisibilityOptions, type Diary, type NewDiary, 
-        type WeatherOption, type VisibilityOption } from './types'
-import diaryService from './services/diaryService.ts'
+        type WeatherOption, type VisibilityOption } from "./types";
+import diaryService from "./services/diaryService.ts";
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
-  const [newDate, setNewDate] = useState('');
+  const [newDate, setNewDate] = useState<string>("");
   const [selectedWeather, setSelectedWeather] = useState<WeatherOption>(WeatherOptions.Sunny);
   const [selectedVisibility, setSelectedVisibility] = useState<VisibilityOption>(VisibilityOptions.Great);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     diaryService.getAll().then(initialDiaries => {
       setDiaries(initialDiaries)
-    })
-  }, [])
+    });
+  }, []);
   
   const handleWeatherChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedWeather(event.target.value as WeatherOption);
@@ -39,40 +39,46 @@ function App() {
       const newDiaryEntry = await diaryService.create(newEntry);
       
       setDiaries([...diaries, newDiaryEntry.data]);
-      console.log(newDiaryEntry?.data);
-      setNewDate('');
-      setNewComment('');
+      reset();
 
     } catch (err: unknown) {
-      const errMessage = err instanceof Error ? err.message : 'An unexpected error occurred.';
+      const errMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
       setErrorMessage(errMessage);
     }
 
   };
 
+  const reset = () =>{
+    setNewDate("");
+    setNewComment(""); 
+    setSelectedWeather(WeatherOptions.Sunny);
+    setSelectedVisibility(VisibilityOptions.Great);
+  };
 
   return (
     <div>
       <div><h2>Add a new entry</h2></div>
       <div>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <form onSubmit={addDiaryEntry}>
           <div>
-            <label htmlFor="date">Date:</label>
+            <label htmlFor="date-field">Date:</label>
             <input 
               value={newDate} 
               name="date" 
+              id="date-field"
               type="date" 
               placeholder="yyyy-mm-dd" 
               onChange={(event) => setNewDate(event.target.value)} />
           </div>
           <div>
-            <label htmlFor="visibility">visibility:</label >
+            <label htmlFor="visibility-field">visibility:</label >
             {Object.values(VisibilityOptions).map((option) => (
-              <label key={option} style={{ display: 'inline-block', margin: '5px 0' }}>
+              <label key={option} style={{ display: "inline-block", margin: "5px 0" }}>
               <input
                 type="radio"
-                name="visibility"
+                name="visibility" 
+                id="visibility-field"
                 value={option}
                 checked={selectedVisibility === option}
                 onChange={handleVisibilityChange}
@@ -85,10 +91,11 @@ function App() {
           <div>
             <label htmlFor="weather-title">weather:</label >
             {Object.values(WeatherOptions).map((option) => (
-              <label key={option} style={{ display: 'inline-block', margin: '5px 0' }}>
+              <label key={option} style={{ display: "inline-block", margin: "5px 0" }}>
               <input
                 type="radio"
-                name="weather"
+                name="weather" 
+                id="weather-title"
                 value={option}
                 checked={selectedWeather === option}
                 onChange={handleWeatherChange}
@@ -99,10 +106,14 @@ function App() {
           </div>
 
           <div>       
-            <label htmlFor="comment">Comment:</label>
-            <input value={newComment} name="comment" onChange={(event) => setNewComment(event.target.value)} />
+            <label htmlFor="comment-field">Comment:</label>
+            <input 
+              value={newComment} 
+              name="comment" 
+              id="comment-field"
+              onChange={(event) => setNewComment(event.target.value)} />
           </div> 
-          <button type='submit'>add</button>
+          <button type="submit">add</button>
         </form>
       </div>
 
@@ -120,7 +131,7 @@ function App() {
        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

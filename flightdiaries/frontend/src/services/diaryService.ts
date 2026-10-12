@@ -21,8 +21,6 @@ const create = async (object: NewDiary) => {
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 400) {
-        //const errorMessage = error.response.data.message || 'Invalid input data.';
-        //const [{ message }] = error.response.data.error;
         let messages = '';
         const errorMessages = error.response.data.error;
          
@@ -31,7 +29,6 @@ const create = async (object: NewDiary) => {
         }
         
         console.log(error.response.data);
-        //console.log(messages);
         throw new Error(`Error: ${messages}`, { cause: error });
       }
       throw new Error('A server error occurred. Please try again.', { cause: error }); 
